@@ -1,0 +1,41 @@
+@startuml
+interface CombatNode {
+  +getName(): String
+  +getHealth(): int
+  +getAttackPower(): int
+  +takeDamage(amount: int): void
+  +isAlive(): boolean
+  +getChildren(): List<CombatNode>
+  +printTree(indent: String): void
+}
+
+abstract class UnitLeaf {
+  -name: String
+  -health: int
+  -attackPower: int
+}
+
+class HeroUnit
+class EnemyUnit
+
+class PartyComposite {
+  -name: String
+  -children: List<CombatNode>
+  +add(node: CombatNode): void
+  +remove(node: CombatNode): void
+}
+
+class RaidGroup
+class RaidEngine {
+  +runRaid(teamA: CombatNode, teamB: CombatNode, teamASkill: Skill, teamBSkill: Skill): RaidResult
+}
+
+CombatNode <|.. UnitLeaf
+CombatNode <|.. PartyComposite
+HeroUnit --|> UnitLeaf
+EnemyUnit --|> UnitLeaf
+RaidGroup --|> PartyComposite
+PartyComposite o-- "0..*" CombatNode
+RaidEngine ..> CombatNode
+RaidEngine ..> Skill
+@enduml
